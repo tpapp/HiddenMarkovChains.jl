@@ -1,7 +1,6 @@
 module HiddenMarkovChains
 
 export
-    is_stochastic_matrix,
     steady_state,
     psp_init,
     psp_observe,
@@ -9,12 +8,11 @@ export
     psp_forward,
     path_probabilities
 
-"Test if P is a stochastic matrix."
-function is_stochastic_matrix{T}(P::AbstractArray{T, 2}; tol=sqrt(eps))
-    n = Base.checksquare(P)
-    e = ones(T, n)
-    isapprox(P*e, e; rtol=tol)
-end
+"Check if argument is a probability vector."
+isprobvec{T}(v::AbstractVector{T}) = all(x->x ≥ 0, v) && sum(v) ≈ one(T)
+
+"Check if argument is a probability (stochastic) matrix."
+isprobmat(m::AbstractMatrix) = all(i->isprobvec(view(m, i, :)), indices(m, 1))
 
 ######################################################################
 # steady state
@@ -25,8 +23,8 @@ nullspace1T(A::AbstractMatrix) = qrfact(A)[:Q][:, end]
 
 function nullspace1T(A::SparseMatrixCSC)
     n = size(A, 1)
-    e=zeros(n)
-    e[n]=1.0
+    e = zeros(n)
+    e[n] = 1.0
     q = SparseArrays.SPQR.qmult(SparseArrays.SPQR.QX, qrfact(A),
                                 SparseArrays.SPQR.Dense(e))
     convert(Vector, q)
@@ -87,10 +85,10 @@ function add_prob!{T, S <: Real}(dict::Dict{T, S}, key::T, prob)
     nothing
 end
 
-"Return a `PathStateProb` object that corresponds to `probabilities`."
-function psp_init{T}(probabilities::AbstractVector{T})
+"Return a `PathStateProb` object that corresponds to `π`."
+function psp_init{T}(π::AbstractVector{T})
     psp = PathStateProb{T}()
-    for (state, prob) in enumerate(probabilities)
+    for (state, prob) in enumerate(π)
         if prob > 0
             psp[PathState(state)] = prob
         end

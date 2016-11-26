@@ -35,6 +35,20 @@ end
 
 
 ######################################################################
+# TEST: check stochastic matrices
+######################################################################
+
+import HiddenMarkovChains: isprobvec, isprobmat
+
+@test isprobvec([0.1, 0.2, 0.7])
+@test !isprobvec([-0.1, 0.1, 1])
+@test !isprobvec([0.1, 0.2])
+
+@test isprobmat(ones(2,3)/3)
+@test !isprobmat([1.0 2.0;])
+@test !isprobmat([-1.0 2.0])
+
+######################################################################
 # TEST: iterate over nonzeros in columns
 ######################################################################
 
