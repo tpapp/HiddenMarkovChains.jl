@@ -23,37 +23,12 @@ function random_stochastic_matrix(nrow; distribution = Normal(), ncol = nrow)
     P
 end
 
-"""
-Simulate a path of length `T` from HMC (P,Q), with initial distribution `p`.
-"""
-function simulate_path(p::AbstractVector, P::AbstractMatrix,
-                           Q::AbstractMatrix, T::Int)
-    _rand(v) = rand(Categorical(v))
-    _rand(M, i) = _rand(collect(M[i, :]))
-    i = _rand(p)
-    path = Array(Int64, T)
-    for t in 1:T
-        path[t] = _rand(Q, i)
-        if t != T
-            i = _rand(P, i)
-        end
-    end
-    path
+"Random HMC for testing. π is steady state."
+function random_HMC(N_states, N_observations, T)
+    HiddenMarkovChain(random_stochastic_matrix(N_states),
+                      random_stochastic_matrix(N_states; ncol=N_observations),
+                      T)
 end
-
-"""
-Simulated probabilities for paths, using `n` draws. See
-`simulate_path` for the other parameters.
-"""
-function simulate_path_probabilities(p::AbstractVector, P::AbstractMatrix,
-                                     Q::AbstractMatrix, T::Int, n::Int)
-    counts = Dict{Array{Int64,1},Int64}()
-    for i in 1:n
-        path = simulate_path(p, P, Q, T)
-        counts[path] = get(counts, path, 0) + 1
-    end
-    Dict(path => count/n for (path, count) in counts)
-    end
 
 """
 Average and largest absolute difference in probabilities. Iterates
