@@ -3,7 +3,6 @@ module HiddenMarkovChains
 using StatsFuns
 using DataStructures
 using Distributions
-using Parameters
 
 export
 # steady state
@@ -44,11 +43,9 @@ end
 HiddenMarkovChain(P::AbstractMatrix, Q, T::Integer) =
     HiddenMarkovChain(steady_state(P), P, Q, T)
 
-
 include("steadystate.jl")
 include("simulation.jl")
 include("pathprob.jl")
 include("likelihood.jl")
-
 
 end # module

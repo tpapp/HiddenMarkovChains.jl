@@ -1,2 +1,4 @@
 julia 0.5-
 Distributions 0.10
+StatsFuns 0.3.1
+DataStructures 0.4.6
