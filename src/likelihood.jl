@@ -40,26 +40,26 @@ function _ll_step(log_α, log_P, log_Q, observation::Int)
      for (j,log_q_j) in enumerate(log_Q[:, observation])]
 end
 
-"Log likelihood of `observations` under HMC `h`."
-function Distributions.loglikelihood(h::HiddenMarkovChain_log, observations::AbstractVector)
+"Log likelihood of `path` under HMC `h`."
+function path_loglikelihood(h::HiddenMarkovChain_log, path::AbstractVector)
     T = length(h)
-    @assert T == length(observations)
-    log_α = _ll_init(h.log_π, h.log_Q[1], observations[1])
+    @assert T == length(path)
+    log_α = _ll_init(h.log_π, h.log_Q[1], path[1])
     for t in 2:T
-        log_α = _ll_step(log_α, h.log_P[t-1], h.log_Q[t], observations[t])
+        log_α = _ll_step(log_α, h.log_P[t-1], h.log_Q[t], path[t])
     end
     logsumexp(log_α)
 end
 
 """
-Log likelihood for a collection of `observation => count` pairs for a
+Log likelihood for a collection of `path => count` pairs for a
 HMC.
 """
-function Distributions.loglikelihood(h::HiddenMarkovChain_log,
-                                      observation_counts::Dict{Vector{Int}, Int})
-    ll(h, count) = count[2] == 0 ? 0 : count[2]*logpdf(h, count.first)
-    sum(ll(h, count) for count in counts)
+function path_loglikelihood(h::HiddenMarkovChain_log,
+                            path_counts::HMCPathDict)
+    ll(h, path_count) = path_count[2] == 0 ? 0 :
+        path_count[2]*path_loglikelihood(h, path_count.first)
+    sum(ll(h, path_count) for path_count in path_counts)
 end
 
-Distributions.loglikelihood(h::HiddenMarkovChain, x) =
-    loglikelihood(HiddenMarkovChain_log(h), x)
+path_loglikelihood(h::HiddenMarkovChain, x) = path_loglikelihood(HiddenMarkovChain_log(h), x)

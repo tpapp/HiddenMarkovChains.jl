@@ -58,10 +58,17 @@ end
 
     let h = random_HMC(3, 5, 3),
         pp = path_probabilities(h),
-        pp_sim = simulate_observation_probabilities(h, 10000),
+        pp_sim = simulate_path_probabilities(h, 10000),
         diffs = path_probabilities_difference(pp, pp_sim)
         @test diffs < (0.01,0.01)
         @test length(uncovered_paths(pp, pp_sim)) == 0
+    end
+
+    let h = random_HMC(3, 5, 3),
+        pc = simulate_path_counts(h, 10000)
+        # FIXME pretty weak test, just establishes that the function works,
+        # but not that the value is correct
+        @test path_loglikelihood(h, pc) < 0
     end
 
 end
@@ -73,8 +80,8 @@ end
         pp = path_probabilities(h)
 
         for i in 1:100
-            o = simulate_observations(h)
-            @test log(pp[o]) ≈ loglikelihood(h, o)
+            path = simulate_path(h)
+            @test log(pp[path]) ≈ path_loglikelihood(h, path)
         end
     end
 

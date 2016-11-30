@@ -33,7 +33,7 @@ end
 """
 Simulate a path of observations from a Hidden Markov Chain.
 """
-function simulate_observations(h::HiddenMarkovChain_sampler)
+function simulate_path(h::HiddenMarkovChain_sampler)
     T = length(h)
     state = rand(h.π)
     observations = Array(Int64, T)
@@ -46,24 +46,25 @@ function simulate_observations(h::HiddenMarkovChain_sampler)
     observations
 end
 
-simulate_observations(h) = simulate_observations(HiddenMarkovChain_sampler(h))
+simulate_path(h) = simulate_path(HiddenMarkovChain_sampler(h))
 
 """
 Simulate `K` Hidden Markov Chains with the given parameters `π`, `P`,
 `Q`, and return the count of observations as an Accumulator.
 """
-function simulate_observation_counts(h::HiddenMarkovChain_sampler, K::Int)
+function simulate_path_counts(h::HiddenMarkovChain_sampler,
+                                     K::Int)::HMCPathDict{Int}
     c = counter(Vector{Int})
     for _ in 1:K
-        push!(c, simulate_observations(h))
+        push!(c, simulate_path(h))
     end
-    c
+    c.map
 end
 
-simulate_observation_counts(h, K) =
-    simulate_observation_counts(HiddenMarkovChain_sampler(h), K)
+simulate_path_counts(h, K) =
+    simulate_path_counts(HiddenMarkovChain_sampler(h), K)
 
-function simulate_observation_probabilities(h, K::Int)
-    Dict(key => count/K for (key,count) in
-         simulate_observation_counts(h, K))
+function simulate_path_probabilities(h, K::Int)::HMCPathDict
+    Dict(key => count/K
+         for (key,count) in simulate_path_counts(h, K))
 end
