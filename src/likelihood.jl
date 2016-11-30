@@ -56,7 +56,7 @@ Log likelihood for a collection of `observation => count` pairs for a
 HMC.
 """
 function log_likelihood(h::HiddenMarkovChain_log,
-                        observation_counts::Dict{Vector{Int}, TInt})
+                        observation_counts::Dict{Vector{Int}, Int})
     ll(h, count) = count[2] == 0 ? 0 : count[2]*log_likelihood(h, count.first)
     sum(ll(h, count) for count in counts)
 end

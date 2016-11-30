@@ -13,6 +13,11 @@ function column_nz(M::SparseMatrixCSC, col::Integer)
     zip(view(rowvals(M), nzr), view(nonzeros(M), nzr))
 end
 
+"""
+Check that P has sufficient length. The length of the HMC is defined
+by the length of Q.
+"""
+_check_HMC_PQ(P, Q) = @assert length(P)+1 >= length(Q)
 
 """
 Repeating the same value `count` times.
