@@ -41,7 +41,7 @@ function _ll_step(log_α, log_P, log_Q, observation::Int)
 end
 
 "Log likelihood of `observations` under HMC `h`."
-function log_likelihood(h::HiddenMarkovChain_log, observations::AbstractVector)
+function Distributions.loglikelihood(h::HiddenMarkovChain_log, observations::AbstractVector)
     T = length(h)
     @assert T == length(observations)
     log_α = _ll_init(h.log_π, h.log_Q[1], observations[1])
@@ -55,11 +55,11 @@ end
 Log likelihood for a collection of `observation => count` pairs for a
 HMC.
 """
-function log_likelihood(h::HiddenMarkovChain_log,
-                        observation_counts::Dict{Vector{Int}, Int})
-    ll(h, count) = count[2] == 0 ? 0 : count[2]*log_likelihood(h, count.first)
+function Distributions.loglikelihood(h::HiddenMarkovChain_log,
+                                      observation_counts::Dict{Vector{Int}, Int})
+    ll(h, count) = count[2] == 0 ? 0 : count[2]*logpdf(h, count.first)
     sum(ll(h, count) for count in counts)
 end
 
-log_likelihood(h::HiddenMarkovChain, x) =
-    log_likelihood(HiddenMarkovChain_log(h), x)
+Distributions.loglikelihood(h::HiddenMarkovChain, x) =
+    loglikelihood(HiddenMarkovChain_log(h), x)

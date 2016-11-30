@@ -13,7 +13,7 @@ include("utilities.jl")
     @test HiddenMarkovChains.isprobvec([0.1, 0.2, 0.7])
     @test !HiddenMarkovChains.isprobvec([-0.1, 0.1, 1])
     @test !HiddenMarkovChains.isprobvec([0.1, 0.2])
-    
+
     @test HiddenMarkovChains.isprobmat(ones(2,3)/3)
     @test !HiddenMarkovChains.isprobmat([1.0 2.0;])
     @test !HiddenMarkovChains.isprobmat([-1.0 2.0])
@@ -37,17 +37,17 @@ end
 @testset "Steady state calculations." begin
 
     @test_throws DimensionMismatch steady_state(ones(2,3)/3)
-    
+
     "Steady state calculation error."
     function ss_error(P)
         p = steady_state(P)
         norm(p'*P-p', 1)
     end
-    
+
     for i in 1:1000
     @test ss_error(random_sparse_stochastic_matrix(9, 4)) < 1e-10
     end
-    
+
     for i in 1:1000
         @test ss_error(random_stochastic_matrix(9)) < 1e-10
     end
@@ -71,10 +71,10 @@ end
     for i in 1:100
         h = random_HMC(3, 2, 5)
         pp = path_probabilities(h)
-        
+
         for i in 1:100
             o = simulate_observations(h)
-            @test log(pp[o]) ≈ log_likelihood(h, o)
+            @test log(pp[o]) ≈ loglikelihood(h, o)
         end
     end
 

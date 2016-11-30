@@ -5,18 +5,18 @@ using DataStructures
 using Distributions
 
 export
-# steady state
-steady_state,
-# hmc
-HiddenMarkovChain,
-# path probabilities
-path_probabilities,
-# simulation
-simulate_observations,
-simulate_observation_counts,
-simulate_observation_probabilities,
-# likelihood
-log_likelihood
+    # utilities — NO EXPORTS
+    # steady state
+    steady_state,
+    # hmc
+    HiddenMarkovChain,
+    # path probabilities
+    path_probabilities,
+    # simulation
+    simulate_observations,
+    simulate_observation_counts,
+    simulate_observation_probabilities
+    # likelihood — NO EXPORTS
 
 include("utilities.jl")
 
