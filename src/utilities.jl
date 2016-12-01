@@ -20,6 +20,23 @@ by the length of Q.
 _check_HMC_PQ(P, Q) = @assert length(P)+1 >= length(Q)
 
 """
+Change the diagonal of a square matrix `m` so that its rows sum to
+`rowsum`, which defaults to 1.
+
+Useful for constructing stochastic transition probability (discrete
+time) or rate (continuous time) matrices. For continuous time, use 0
+as an optional argument.
+
+Does not check nonnegativity.
+"""
+function enforce_rowsums!{T}(m::AbstractMatrix{T}, rowsum=one(T))
+    for row in 1:LinAlg.checksquare(m)
+        m[row,row] = rowsum-sum(m[row, vcat(1:(row-1),(row+1):end)])
+    end
+    m
+end
+
+"""
 Repeating the same value `count` times.
 
 The most important function of `map`, since it allows us to apply

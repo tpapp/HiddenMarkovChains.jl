@@ -8,7 +8,8 @@ export
     # this file
     HiddenMarkovChain,
     HMC_Observation_Counts,
-    # utilities — NO EXPORTS
+    # utilities
+    enforce_rowsums!,
     # steady state
     steady_state,
     # hmc
