@@ -8,7 +8,7 @@ include("utilities.jl")
 # helper functions
 ######################################################################
 
-@testset "Validating probability vectors and matrices." begin
+@testset "Validating probability vectors and matrices" begin
 
     @test HiddenMarkovChains.isprobvec([0.1, 0.2, 0.7])
     @test !HiddenMarkovChains.isprobvec([-0.1, 0.1, 1])
@@ -20,7 +20,7 @@ include("utilities.jl")
 
 end
 
-@testset "Iteration over nonzeros." begin
+@testset "Iteration over nonzeros" begin
 
     @test collect(HiddenMarkovChains.column_nz(reshape(1:9, 3, 3), 2)) ==
         [(1,4), (2,5), (3,6)]
@@ -34,7 +34,7 @@ end
 # rowsums
 ######################################################################
 
-@testset "Rowsums." begin
+@testset "Rowsums" begin
     for i in 1:100
         m = randn(10,10)
         enforce_rowsums!(m)
@@ -46,7 +46,7 @@ end
 # TEST: steady state calculations
 ######################################################################
 
-@testset "Steady state calculations." begin
+@testset "Steady state calculations" begin
 
     @test_throws DimensionMismatch steady_state(ones(2,3)/3)
 
@@ -66,7 +66,7 @@ end
 
 end
 
-@testset "Path simulations." begin
+@testset "Path simulations" begin
 
     let h = random_HMC(3, 5, 3),
         pp = path_probabilities(h),
@@ -85,7 +85,7 @@ end
 
 end
 
-@testset "Log likelihood." begin
+@testset "Log likelihood" begin
 
     for i in 1:100
         h = random_HMC(3, 2, 5)
