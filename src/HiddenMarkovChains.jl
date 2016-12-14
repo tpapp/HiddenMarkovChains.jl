@@ -41,6 +41,9 @@ immutable HiddenMarkovChain
     Q::AbstractVector
     function HiddenMarkovChain(π, P, Q)
         _check_HMC_PQ(P, Q)
+        isprobvec(π) || error("π needs to be a probability vector")
+        all(map(isprobmat, P)) || error("Ps need to be a probability matrices")
+        all(map(isprobmat, Q)) || error("Qs need to be a probability matrices")
         new(π, P, Q)
     end
 end
