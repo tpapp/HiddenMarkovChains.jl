@@ -5,8 +5,11 @@
 [![Coverage Status](https://coveralls.io/repos/tpapp/HiddenMarkovChains.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/tpapp/HiddenMarkovChains.jl?branch=master)
 [![codecov.io](http://codecov.io/github/tpapp/HiddenMarkovChains.jl/coverage.svg?branch=master)](http://codecov.io/github/tpapp/HiddenMarkovChains.jl?branch=master)
 
-This is a preliminary collection of functions I use for calculations that involve Hidden Markov Chains (HMC). It is mainly used for [indirect inference](http://www.econ.yale.edu/smith/palgrave7.pdf) for macroeconomic models, in which the state space is discretized. Exact calculation of path probabilities allows smooth functions of model parameters, obviating the need for [explicit smoothing](http://arxiv.org/abs/1507.06115) (of course discretization brings in another set of problems).
+This is a preliminary collection of functions I use for calculations that involve Hidden Markov Chains (HMC). It is mainly used for
 
+1. [indirect inference](http://www.econ.yale.edu/smith/palgrave7.pdf) for macroeconomic models, in which the state space is discretized. Exact calculation of path probabilities allows smooth functions of model parameters, obviating the need for [explicit smoothing](http://arxiv.org/abs/1507.06115) (of course discretization brings in another set of problems), and
+
+2. likelihood-based methods, such as Bayesian MCMC, with HMCs. The library implements numerically stable calculation of log likelihoods for observed sequences.
 
 ## Bibliography
 
