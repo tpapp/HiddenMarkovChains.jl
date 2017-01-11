@@ -20,5 +20,8 @@ Uses the QR decomposition, see Golub and Meyer (1986)."
 function steady_state(P)
     isprobmat(P) ||
         error(ArgumentError("argument needs to be a stochastic matrix"))
-    normalize(nullspace1T(P-I), 1)
+    π = nullspace1T(P-I)
+    # NOTE not using `normalize(π,1)` because of
+    # https://github.com/JuliaDiff/ForwardDiff.jl/issues/175
+    π ./ sum(π)
 end
