@@ -38,7 +38,7 @@ function path_probabilities_difference(pp, pp_sim)
     sumdiff = 0.0
     maxdiff = 0.0
     for (path, prob) in pp
-        diff = abs(pp_sim[path] - prob)
+        diff = abs(get(pp_sim, path, 0.0) - prob)
         sumdiff += diff
         maxdiff = max(maxdiff, diff)
     end
